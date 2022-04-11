@@ -52,8 +52,6 @@ public class RegistrationActivity extends AppCompatActivity {
         password = findViewById(R.id.passwordEditText);
         passwordConfirm = findViewById(R.id.passwordAgainEditText);
         phone = findViewById(R.id.phoneEditText);
-        accountType = findViewById(R.id.accountTypeGroup);
-        accountType.check(R.id.buyer);
         preferences = getSharedPreferences(PREF_KEY, MODE_PRIVATE);
         mAuth = FirebaseAuth.getInstance();
 
@@ -74,10 +72,6 @@ public class RegistrationActivity extends AppCompatActivity {
         String password = this.password.getText().toString();
         String passwordConfirm = this.passwordConfirm.getText().toString();
 
-        int accountTypeId = accountType.getCheckedRadioButtonId();
-        View radioButton = accountType.findViewById(accountTypeId);
-        int id = accountType.indexOfChild(radioButton);
-        String accountType =  ((RadioButton) this.accountType.getChildAt(id)).getText().toString();
 
         if (checkPassword(password, passwordConfirm)) return;
         Log.i(LOG_TAG, "Regisztrált: " + userName + ", e-mail: " + email);

@@ -19,10 +19,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
-    private static final String LOG_TAG = MainActivity.class.getName();
-    private static final String PREF_KEY = MainActivity.class.getPackage().toString();
+    private static final String LOG_TAG = LoginActivity.class.getName();
+    private static final String PREF_KEY = LoginActivity.class.getPackage().toString();
     private static final int RC_SIGN_IN = 123;
     private static final int SECRET_KEY = 666;
 
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void anonymLoginFail(@NonNull Task<AuthResult> task) {
         Log.d(LOG_TAG, "Anonym user log in fail");
-        Toast.makeText(MainActivity.this, "User log in fail: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+        Toast.makeText(LoginActivity.this, "User log in fail: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
     }
 
     private void anonymLoginSuccess() {
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startShopping() {
-        Intent intent = new Intent(this, NailsListActivity.class);
+        Intent intent = new Intent(this, MenuActivity.class);
         startActivity(intent);
     }
 
