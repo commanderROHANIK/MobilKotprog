@@ -14,6 +14,9 @@
     <string name="customer">Vásárló</string>
     <string name="seller">Eladó</string>
     <string name="product_description">Termék leírása.</string>
+    <string name="allocate">Lefoglal</string>
+    <string name="idopontfoglalo">Időpontfoglaló</string>
+    <string name="katalogus">Katalógus</string>
 
     <string-array name="phone_labels">
         <item>Otthon</item>

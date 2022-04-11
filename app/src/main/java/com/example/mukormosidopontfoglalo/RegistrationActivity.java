@@ -21,120 +21,104 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class RegistrationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class RegistrationActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = RegistrationActivity.class.getName();
     private static final String PREF_KEY = RegistrationActivity.class.getPackage().toString();
-    private static final int SECRET_KEY = 99;
-
-    EditText userNameEditText;
-    EditText userEmailEditText;
-    EditText passwordEditText;
-    EditText passwordConfirmEditText;
-    EditText phoneEditText;
-    Spinner spinner;
-    RadioGroup accountTypeGroup;
+    private static final int SECRET_KEY = 666;
 
     private SharedPreferences preferences;
     private FirebaseAuth mAuth;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registration);
-
-        int secret_key = getIntent().getIntExtra("SECRET_KEY", 0);
-
-        if (secret_key != 99) {
-            finish();
-        }
-
-        userNameEditText = findViewById(R.id.userNameEditText);
-        userEmailEditText = findViewById(R.id.userEmailEditText);
-        passwordEditText = findViewById(R.id.passwordEditText);
-        passwordConfirmEditText = findViewById(R.id.passwordAgainEditText);
-        phoneEditText = findViewById(R.id.phoneEditText);
-        spinner = findViewById(R.id.phoneSpinner);
-        accountTypeGroup = findViewById(R.id.accountTypeGroup);
-        accountTypeGroup.check(R.id.buyer);
-
-        preferences = getSharedPreferences(PREF_KEY, MODE_PRIVATE);
-        String userName = preferences.getString("userName", "");
-        String password = preferences.getString("password", "");
-
-        userNameEditText.setText(userName);
-        passwordEditText.setText(password);
-        passwordConfirmEditText.setText(password);
-
-        spinner.setOnItemSelectedListener(this);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.phone_labels, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
-        mAuth = FirebaseAuth.getInstance();
-
-        Log.i(LOG_TAG, "onCreate");
-    }
-
-    public void register(View view) {
-        String userName = userNameEditText.getText().toString();
-        String email = userEmailEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
-        String passwordConfirm = passwordConfirmEditText.getText().toString();
-
-        if (!password.equals(passwordConfirm)) {
-            Log.e(LOG_TAG, "Nem egyenlő a jelszó és a megerősítése.");
-            return;
-        }
-
-        String phone = phoneEditText.getText().toString();
-        String phoneType = spinner.getSelectedItem().toString();
-
-        int accountTypeId = accountTypeGroup.getCheckedRadioButtonId();
-        View radioButton = accountTypeGroup.findViewById(accountTypeId);
-        int id = accountTypeGroup.indexOfChild(radioButton);
-        String accountType =  ((RadioButton)accountTypeGroup.getChildAt(id)).getText().toString();
-
-        Log.i(LOG_TAG, "Regisztrált: " + userName + ", e-mail: " + email);
-        // startShopping();
-
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    Log.d(LOG_TAG, "User created successfully");
-                    startShopping();
-                } else {
-                    Log.d(LOG_TAG, "User wasn't created successfully");
-                    Toast.makeText(
-                            RegistrationActivity.this,
-                            "User was't created successfully: " + task.getException().getMessage(),
-                            Toast.LENGTH_LONG
-                    ).show();
-                }
-            }
-        });
-    }
+    EditText userName;
+    EditText userEmail;
+    EditText password;
+    EditText passwordConfirm;
+    EditText phone;
+    RadioGroup accountType;
 
     public void cancel(View view) {
         finish();
     }
 
-    private void startShopping(/* registered used class */) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_registration);
+        checkSecretKey();
+
+        userName = findViewById(R.id.userNameEditText);
+        userEmail = findViewById(R.id.userEmailEditText);
+        password = findViewById(R.id.passwordEditText);
+        passwordConfirm = findViewById(R.id.passwordAgainEditText);
+        phone = findViewById(R.id.phoneEditText);
+        preferences = getSharedPreferences(PREF_KEY, MODE_PRIVATE);
+        mAuth = FirebaseAuth.getInstance();
+
+        this.userName.setText(preferences.getString("userName", ""));
+        this.password.setText(preferences.getString("password", ""));
+        passwordConfirm.setText(preferences.getString("password", ""));
+    }
+
+    private void checkSecretKey() {
+        if (getIntent().getIntExtra("SECRET_KEY", 0) != 666) {
+            finish();
+        }
+    }
+
+    public void register(View view) {
+        String userName = this.userName.getText().toString();
+        String email = userEmail.getText().toString();
+        String password = this.password.getText().toString();
+        String passwordConfirm = this.passwordConfirm.getText().toString();
+
+
+        if (checkPassword(password, passwordConfirm)) return;
+        Log.i(LOG_TAG, "Regisztrált: " + userName + ", e-mail: " + email);
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, getOncompleteListener());
+    }
+
+    private boolean checkPassword(String password, String passwordConfirm) {
+        if (!password.equals(passwordConfirm)) {
+            Log.e(LOG_TAG, "Nem egyenlő a jelszó és a megerősítése.");
+            return true;
+        }
+        return false;
+    }
+
+    private OnCompleteListener getOncompleteListener() {
+        return new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                registrate(task);
+            }
+        };
+    }
+
+    private void registrate(@NonNull Task<AuthResult> task) {
+        if(task.isSuccessful()){
+            registrationSuccess();
+        } else {
+            registrationFail(task);
+        }
+    }
+
+    private void registrationFail(@NonNull Task<AuthResult> task) {
+        Log.d(LOG_TAG, "User wasn't created successfully");
+        Toast.makeText(
+                RegistrationActivity.this,
+                "User was't created successfully: " + task.getException().getMessage(),
+                Toast.LENGTH_LONG
+        ).show();
+    }
+
+    private void registrationSuccess() {
+        Log.d(LOG_TAG, "User created successfully");
+        startShopping();
+    }
+
+    private void startShopping() {
         Intent intent = new Intent(this, NailsListActivity.class);
-        // intent.putExtra("SECRET_KEY", SECRET_KEY);
         startActivity(intent);
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String selectedItem = parent.getItemAtPosition(position).toString();
-        Log.i(LOG_TAG, selectedItem);
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
     }
 }
