@@ -61,7 +61,6 @@ public class MenuActivity extends AppCompatActivity {
         btPickDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 DatePickerDialog datePickerDialog = new DatePickerDialog(
                         MenuActivity.this,
                         date,
