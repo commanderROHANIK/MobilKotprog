@@ -20,19 +20,18 @@ import java.util.Calendar;
 public class MenuActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = LoginActivity.class.getName();
-
     final Calendar myCalendar = Calendar.getInstance();
-
     int orak = 0;
     int percek = 0;
     TextView tvDate;
     Button btPickDate;
+    NotificationHandler notificationHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
+        notificationHandler = new NotificationHandler(this);
         tvDate = findViewById(R.id.textView);
         btPickDate = findViewById(R.id.idopontFoglalas);
 
@@ -77,6 +76,7 @@ public class MenuActivity extends AppCompatActivity {
         String myFormat = "yyyy-MM-dd";
         SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat);
         tvDate.setText(dateFormat.format(myCalendar.getTime()) + " " + orak + ":" + percek);
+        notificationHandler.send(dateFormat.format(myCalendar.getTime()) + " " + orak + ":" + percek);
     }
 
     public void gotToIdopontFoglalo(View view) {
