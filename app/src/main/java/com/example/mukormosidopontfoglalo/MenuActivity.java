@@ -2,7 +2,6 @@ package com.example.mukormosidopontfoglalo;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -34,23 +33,31 @@ public class MenuActivity extends AppCompatActivity {
         tvDate = findViewById(R.id.textView);
         btPickDate = findViewById(R.id.idopontFoglalas);
 
+        TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int i, int i1) {
+                orak = i;
+                percek = i1;
+                updateLabel();
+
+            }
+        };
+
         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, month);
                 myCalendar.set(Calendar.DAY_OF_MONTH, day);
-                updateLabel();
+
+
+
+                TimePickerDialog timePickerDialog = new TimePickerDialog(MenuActivity.this, time, orak, percek, true);
+                timePickerDialog.show();
             }
         };
 
-        TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                orak = i;
-                percek = i1;
-            }
-        };
+
 
         btPickDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,28 +70,7 @@ public class MenuActivity extends AppCompatActivity {
                         myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)
                 );
-
-                datePickerDialog.setButton(DatePickerDialog.BUTTON_POSITIVE, "pénisz", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                        TimePickerDialog timePickerDialog = new TimePickerDialog(MenuActivity.this, time, orak, percek, true);
-//
-////                        timePickerDialog.setButton(TimePickerDialog.BUTTON_POSITIVE, "szar", new DialogInterface.OnClickListener() {
-////                            @Override
-////                            public void onClick(DialogInterface dialogInterface, int i) {
-////////                                datePickerDialog.show();
-//////                                updateLabel();
-////                            }
-////                        });
-////
-//                        timePickerDialog.show();
-//                    }
-                });
-
                 datePickerDialog.show();
-                updateLabel();
-
             }
         });
     }
