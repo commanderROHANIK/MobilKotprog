@@ -1,20 +1,15 @@
 package com.example.mukormosidopontfoglalo;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,14 +23,13 @@ public class RegistrationActivity extends AppCompatActivity {
     private static final int SECRET_KEY = 666;
 
     private SharedPreferences preferences;
-    private FirebaseAuth mAuth;
+    private FirebaseAuth auth;
 
     EditText userName;
     EditText userEmail;
     EditText password;
     EditText passwordConfirm;
     EditText phone;
-    RadioGroup accountType;
 
     public void cancel(View view) {
         finish();
@@ -53,7 +47,7 @@ public class RegistrationActivity extends AppCompatActivity {
         passwordConfirm = findViewById(R.id.passwordAgainEditText);
         phone = findViewById(R.id.phoneEditText);
         preferences = getSharedPreferences(PREF_KEY, MODE_PRIVATE);
-        mAuth = FirebaseAuth.getInstance();
+        auth = FirebaseAuth.getInstance();
 
         this.userName.setText(preferences.getString("userName", ""));
         this.password.setText(preferences.getString("password", ""));
@@ -72,10 +66,9 @@ public class RegistrationActivity extends AppCompatActivity {
         String password = this.password.getText().toString();
         String passwordConfirm = this.passwordConfirm.getText().toString();
 
-
         if (checkPassword(password, passwordConfirm)) return;
         Log.i(LOG_TAG, "Regisztrált: " + userName + ", e-mail: " + email);
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, getOncompleteListener());
+        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, getOncompleteListener());
     }
 
     private boolean checkPassword(String password, String passwordConfirm) {
