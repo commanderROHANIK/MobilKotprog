@@ -2,6 +2,7 @@ package com.example.mukormosidopontfoglalo;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +10,7 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.SimpleDateFormat;
@@ -20,6 +22,7 @@ public class MenuActivity extends AppCompatActivity {
     private static final String LOG_TAG = LoginActivity.class.getName();
 
     final Calendar myCalendar = Calendar.getInstance();
+
     int orak = 0;
     int percek = 0;
     TextView tvDate;
@@ -34,12 +37,12 @@ public class MenuActivity extends AppCompatActivity {
         btPickDate = findViewById(R.id.idopontFoglalas);
 
         TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                orak = i;
-                percek = i1;
+                orak = timePicker.getHour();
+                percek = timePicker.getMinute();
                 updateLabel();
-
             }
         };
 
@@ -50,14 +53,10 @@ public class MenuActivity extends AppCompatActivity {
                 myCalendar.set(Calendar.MONTH, month);
                 myCalendar.set(Calendar.DAY_OF_MONTH, day);
 
-
-
                 TimePickerDialog timePickerDialog = new TimePickerDialog(MenuActivity.this, time, orak, percek, true);
                 timePickerDialog.show();
             }
         };
-
-
 
         btPickDate.setOnClickListener(new View.OnClickListener() {
             @Override
