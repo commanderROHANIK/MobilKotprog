@@ -17,6 +17,7 @@
     <string name="allocate">Lefoglal</string>
     <string name="idopontfoglalo">Időpontfoglaló</string>
     <string name="katalogus">Katalógus</string>
+    <string name="email">Email</string>
 
     <string-array name="phone_labels">
         <item>Otthon</item>
