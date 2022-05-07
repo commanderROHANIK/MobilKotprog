@@ -15,6 +15,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -24,6 +26,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private SharedPreferences preferences;
     private FirebaseAuth auth;
+    private FirebaseFirestore firestore;
+    private CollectionReference users;
 
     EditText userName;
     EditText userEmail;
@@ -52,6 +56,9 @@ public class RegistrationActivity extends AppCompatActivity {
         this.userName.setText(preferences.getString("userName", ""));
         this.password.setText(preferences.getString("password", ""));
         passwordConfirm.setText(preferences.getString("password", ""));
+
+        firestore = FirebaseFirestore.getInstance();
+        users = firestore.collection("Users");
     }
 
     private void checkSecretKey() {
@@ -107,11 +114,12 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private void registrationSuccess() {
         Log.d(LOG_TAG, "User created successfully");
+        users.add(new User(userEmail.getText().toString(), userName.getText().toString()));
         startShopping();
     }
 
     private void startShopping() {
-        Intent intent = new Intent(this, NailsListActivity.class);
+        Intent intent = new Intent(this, MenuActivity.class);
         startActivity(intent);
     }
 }
