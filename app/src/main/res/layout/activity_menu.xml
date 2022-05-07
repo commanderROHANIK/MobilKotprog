@@ -6,11 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".MenuActivity">
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        />
+
     <Button
         android:id="@+id/idopontFoglalas"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="@string/idopontfoglalo"/>
+        android:layout_marginTop="@dimen/register_margin_top"
+        android:text="@string/idopontfoglalo"
+        android:onClick="gotToIdopontFoglalo"
+        android:layout_below="@+id/textView"
+        />
 
     <Button
         android:id="@+id/katalogus"
@@ -18,5 +32,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="@dimen/register_margin_top"
         android:layout_below="@+id/idopontFoglalas"
-        android:text="@string/katalogus"/>
+        android:text="@string/katalogus"
+        android:onClick="goToKatalogus"
+        />
 </RelativeLayout>

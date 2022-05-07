@@ -1,25 +1,22 @@
 package com.example.mukormosidopontfoglalo;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -28,14 +25,15 @@ public class RegistrationActivity extends AppCompatActivity {
     private static final int SECRET_KEY = 666;
 
     private SharedPreferences preferences;
-    private FirebaseAuth mAuth;
+    private FirebaseAuth auth;
+    private FirebaseFirestore firestore;
+    private CollectionReference users;
 
     EditText userName;
     EditText userEmail;
     EditText password;
     EditText passwordConfirm;
     EditText phone;
-    RadioGroup accountType;
 
     public void cancel(View view) {
         finish();
@@ -53,11 +51,14 @@ public class RegistrationActivity extends AppCompatActivity {
         passwordConfirm = findViewById(R.id.passwordAgainEditText);
         phone = findViewById(R.id.phoneEditText);
         preferences = getSharedPreferences(PREF_KEY, MODE_PRIVATE);
-        mAuth = FirebaseAuth.getInstance();
+        auth = FirebaseAuth.getInstance();
 
         this.userName.setText(preferences.getString("userName", ""));
         this.password.setText(preferences.getString("password", ""));
         passwordConfirm.setText(preferences.getString("password", ""));
+
+        firestore = FirebaseFirestore.getInstance();
+        users = firestore.collection("Users");
     }
 
     private void checkSecretKey() {
@@ -72,10 +73,9 @@ public class RegistrationActivity extends AppCompatActivity {
         String password = this.password.getText().toString();
         String passwordConfirm = this.passwordConfirm.getText().toString();
 
-
         if (checkPassword(password, passwordConfirm)) return;
         Log.i(LOG_TAG, "Regisztrált: " + userName + ", e-mail: " + email);
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, getOncompleteListener());
+        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, getOncompleteListener());
     }
 
     private boolean checkPassword(String password, String passwordConfirm) {
@@ -114,11 +114,12 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private void registrationSuccess() {
         Log.d(LOG_TAG, "User created successfully");
+        users.add(new User(userEmail.getText().toString(), userName.getText().toString()));
         startShopping();
     }
 
     private void startShopping() {
-        Intent intent = new Intent(this, NailsListActivity.class);
+        Intent intent = new Intent(this, MenuActivity.class);
         startActivity(intent);
     }
 }

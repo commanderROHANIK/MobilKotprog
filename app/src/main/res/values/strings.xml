@@ -24,4 +24,23 @@
         <item>Mobil</item>
         <item>Egyéb</item>
     </string-array>
+
+    <array name="nail_images">
+        <item>@drawable/n1</item>
+        <item>@drawable/n2</item>
+        <item>@drawable/n3</item>
+        <item>@drawable/n4</item>
+        <item>@drawable/n5</item>
+        <item>@drawable/n6</item>
+        <item>@drawable/n7</item>
+        <item>@drawable/n8</item>
+        <item>@drawable/n9</item>
+        <item>@drawable/n10</item>
+        <item>@drawable/n11</item>
+        <item>@drawable/n12</item>
+        <item>@drawable/n13</item>
+        <item>@drawable/n14</item>
+        <item>@drawable/n15</item>
+        <item>@drawable/n16</item>
+    </array>
 </resources>
