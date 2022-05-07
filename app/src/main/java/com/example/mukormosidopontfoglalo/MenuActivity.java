@@ -85,6 +85,23 @@ public class MenuActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (auth.getCurrentUser() != null && !auth.getCurrentUser().getUid().isEmpty() && !auth.getCurrentUser().isAnonymous()){
+            tvDate.setText(auth.getCurrentUser().getUid());
+//            tvDate.setText(idopontok.whereEqualTo("userID", auth.getCurrentUser().getUid()).toString());
+        } else {
+            tvDate.setText("nem");
+            Toast.makeText(MenuActivity.this, "Hiba: Anonim bejelentkezés után nincs lehetőség időpontot foglalni", Toast.LENGTH_LONG).show();
+        }
+
+//        getLegutobbi(userID: string) {
+//            return this.afs.collection<Idopont>(this.collecitonName, ref => ref.where("userID", "==", userID).orderBy("idopont", "desc").limit(1)).valueChanges();
+//        }
+    }
+
     private void updateLabel() {
         if (auth.getCurrentUser() != null){
             String myFormat = "yyyy-MM-dd";
