@@ -28,8 +28,8 @@ public class NailsListActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (user == null){
-//            finish();
+        if (LoginActivity.isAnonym){
+            finish();
         }
 
         recyclerView = findViewById(R.id.recyclerView);

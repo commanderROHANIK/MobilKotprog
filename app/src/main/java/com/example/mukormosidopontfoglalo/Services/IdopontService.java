@@ -32,7 +32,7 @@ public class IdopontService {
     }
 
     public void update(Idopont idopont) {
-        idopontok.document().update("id", idopont);
+        idopontok.document(idopont.getId()).update("idopont", idopont.getIdopont());
     }
 
     public void delete(String id) {
@@ -47,11 +47,8 @@ public class IdopontService {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-//                            Log.d(LOG_TAG, document.getId() + " => " + document.getData());
                             textView.setText((CharSequence) document.getData().get("idopont"));
                         }
-                    } else {
-//                        Log.d(LOG_TAG, "Error getting documents: ", task.getException());
                     }
                 });
     }
@@ -63,11 +60,8 @@ public class IdopontService {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-//                            Log.d(LOG_TAG, document.getId() + " => " + document.getData());
                             textView.setText((CharSequence) document.getData().get("idopont"));
                         }
-                    } else {
-//                        Log.d(LOG_TAG, "Error getting documents: ", task.getException());
                     }
                 });
     }
