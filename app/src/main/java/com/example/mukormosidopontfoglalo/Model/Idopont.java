@@ -1,4 +1,4 @@
-package com.example.mukormosidopontfoglalo;
+package com.example.mukormosidopontfoglalo.Model;
 
 public class Idopont {
     private String id;

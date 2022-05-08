@@ -1,7 +1,8 @@
-package com.example.mukormosidopontfoglalo;
+package com.example.mukormosidopontfoglalo.Services;
 
 import android.widget.TextView;
 
+import com.example.mukormosidopontfoglalo.Model.Idopont;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
