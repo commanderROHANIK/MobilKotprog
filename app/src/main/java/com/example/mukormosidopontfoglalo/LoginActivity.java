@@ -10,9 +10,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -24,10 +21,10 @@ public class LoginActivity extends AppCompatActivity {
     private static final String PREF_KEY = LoginActivity.class.getPackage().toString();
     private static final int RC_SIGN_IN = 123;
     private static final int SECRET_KEY = 666;
+    public static boolean isAnonym = false;
 
     private SharedPreferences preferences;
     private FirebaseAuth auth;
-    private GoogleSignInClient googleSignInClient;
 
     EditText userName;
     EditText password;
@@ -41,12 +38,6 @@ public class LoginActivity extends AppCompatActivity {
         this.password = findViewById(R.id.editTextPassword);
         this.preferences = getSharedPreferences(PREF_KEY, MODE_PRIVATE);
         this.auth = FirebaseAuth.getInstance();
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        this.googleSignInClient = GoogleSignIn.getClient(this, gso);
     }
 
     public void login(View view) {
@@ -65,14 +56,12 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public void loginWithGoogle(View view) {
-    }
-
     public void loginAsGuest(View view) {
         auth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
+                    isAnonym = true;
                     startShopping();
                 } else {
                     Toast.makeText(LoginActivity.this, "User log in fail: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();

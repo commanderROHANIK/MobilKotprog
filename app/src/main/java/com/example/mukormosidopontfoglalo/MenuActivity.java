@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -18,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,7 +33,8 @@ public class MenuActivity extends AppCompatActivity {
     int orak = 0;
     int percek = 0;
     FirebaseAuth auth;
-    TextView tvDate;
+    TextView legtavolabbi;
+    TextView foglalasok;
     Button btPickDate;
     NotificationHandler notificationHandler;
     private FirebaseFirestore firestore;
@@ -41,7 +45,8 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         notificationHandler = new NotificationHandler(this);
-        tvDate = findViewById(R.id.textView);
+        legtavolabbi = findViewById(R.id.legtavolabbiFoglalas);
+        foglalasok = findViewById(R.id.foglalasok);
         btPickDate = findViewById(R.id.idopontFoglalas);
         auth = FirebaseAuth.getInstance();
 
@@ -85,11 +90,49 @@ public class MenuActivity extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (!LoginActivity.isAnonym) {
+            firestore.collection("Idopontok")
+                    .whereEqualTo("userID", auth.getCurrentUser().getUid())
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(LOG_TAG, document.getId() + " => " + document.getData());
+                                foglalasok.setText((CharSequence) document.getData().get("idopont"));
+                            }
+                        } else {
+                            Log.d(LOG_TAG, "Error getting documents: ", task.getException());
+                        }
+                    });
+
+            firestore.collection("Idopontok")
+                    .whereEqualTo("userID", auth.getCurrentUser().getUid())
+                    .orderBy("idopont", Query.Direction.DESCENDING)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(LOG_TAG, document.getId() + " => " + document.getData());
+                                legtavolabbi.setText((CharSequence) document.getData().get("idopont"));
+                            }
+                        } else {
+                            Log.d(LOG_TAG, "Error getting documents: ", task.getException());
+                        }
+                    });
+        } else {
+            Toast.makeText(MenuActivity.this, "A lekérdezések során hiba történt", Toast.LENGTH_LONG).show();
+        }
+    }
+
     private void updateLabel() {
-        if (auth.getCurrentUser() != null){
+        if (!LoginActivity.isAnonym) {
             String myFormat = "yyyy-MM-dd";
             SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat);
-            tvDate.setText(dateFormat.format(myCalendar.getTime()) + " " + orak + ":" + percek);
             notificationHandler.send(dateFormat.format(myCalendar.getTime()) + " " + orak + ":" + percek);
             idopontok.add(new Idopont(auth.getCurrentUser().getUid(), dateFormat.format(myCalendar.getTime()) + " " + orak + ":" + percek));
         } else {
