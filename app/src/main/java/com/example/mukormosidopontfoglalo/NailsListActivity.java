@@ -19,7 +19,7 @@ public class NailsListActivity extends AppCompatActivity {
     private ArrayList<NalisListItem> itemList;
     private NailsListItemAdapter adapter;
     private static final String LOG_TAG = NailsListActivity.class.getName();
-    private int gridNumber = 1;
+    private int gridNumber = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,7 @@ public class NailsListActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user == null){
-            finish();
+//            finish();
         }
 
         recyclerView = findViewById(R.id.recyclerView);

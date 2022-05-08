@@ -13,9 +13,6 @@
             android:name=".MenuActivity"
             android:exported="false" />
         <activity
-            android:name=".IdopontFoglaloActivity"
-            android:exported="false" />
-        <activity
             android:name=".RegistrationActivity"
             android:exported="false" />
         <activity

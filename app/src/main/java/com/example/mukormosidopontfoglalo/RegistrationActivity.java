@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mukormosidopontfoglalo.Model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -29,11 +30,10 @@ public class RegistrationActivity extends AppCompatActivity {
     private FirebaseFirestore firestore;
     private CollectionReference users;
 
-    EditText userName;
+    EditText name;
     EditText userEmail;
     EditText password;
     EditText passwordConfirm;
-    EditText phone;
 
     public void cancel(View view) {
         finish();
@@ -45,15 +45,13 @@ public class RegistrationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_registration);
         checkSecretKey();
 
-        userName = findViewById(R.id.userNameEditText);
+        name = findViewById(R.id.nev);
         userEmail = findViewById(R.id.userEmailEditText);
         password = findViewById(R.id.passwordEditText);
         passwordConfirm = findViewById(R.id.passwordAgainEditText);
-        phone = findViewById(R.id.phoneEditText);
         preferences = getSharedPreferences(PREF_KEY, MODE_PRIVATE);
         auth = FirebaseAuth.getInstance();
 
-        this.userName.setText(preferences.getString("userName", ""));
         this.password.setText(preferences.getString("password", ""));
         passwordConfirm.setText(preferences.getString("password", ""));
 
@@ -68,13 +66,12 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     public void register(View view) {
-        String userName = this.userName.getText().toString();
         String email = userEmail.getText().toString();
         String password = this.password.getText().toString();
         String passwordConfirm = this.passwordConfirm.getText().toString();
 
         if (checkPassword(password, passwordConfirm)) return;
-        Log.i(LOG_TAG, "Regisztrált: " + userName + ", e-mail: " + email);
+        Log.i(LOG_TAG, "Regisztrált: e-mail: " + email);
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, getOncompleteListener());
     }
 
@@ -114,7 +111,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private void registrationSuccess() {
         Log.d(LOG_TAG, "User created successfully");
-        users.add(new User(userEmail.getText().toString(), userName.getText().toString()));
+        users.add(new User(userEmail.getText().toString(), name.getText().toString()));
         startShopping();
     }
 

@@ -5,7 +5,6 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -16,11 +15,11 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mukormosidopontfoglalo.Model.Idopont;
+import com.example.mukormosidopontfoglalo.Services.IdopontService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -39,11 +38,13 @@ public class MenuActivity extends AppCompatActivity {
     NotificationHandler notificationHandler;
     private FirebaseFirestore firestore;
     private CollectionReference idopontok;
+    private IdopontService idopontService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        idopontService = new IdopontService();
         notificationHandler = new NotificationHandler(this);
         legtavolabbi = findViewById(R.id.legtavolabbiFoglalas);
         foglalasok = findViewById(R.id.foglalasok);
@@ -96,34 +97,8 @@ public class MenuActivity extends AppCompatActivity {
         super.onStart();
 
         if (!LoginActivity.isAnonym) {
-            firestore.collection("Idopontok")
-                    .whereEqualTo("userID", auth.getCurrentUser().getUid())
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(LOG_TAG, document.getId() + " => " + document.getData());
-                                foglalasok.setText((CharSequence) document.getData().get("idopont"));
-                            }
-                        } else {
-                            Log.d(LOG_TAG, "Error getting documents: ", task.getException());
-                        }
-                    });
-
-            firestore.collection("Idopontok")
-                    .whereEqualTo("userID", auth.getCurrentUser().getUid())
-                    .orderBy("idopont", Query.Direction.DESCENDING)
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(LOG_TAG, document.getId() + " => " + document.getData());
-                                legtavolabbi.setText((CharSequence) document.getData().get("idopont"));
-                            }
-                        } else {
-                            Log.d(LOG_TAG, "Error getting documents: ", task.getException());
-                        }
-                    });
+            idopontService.getLegtavolabbi(legtavolabbi);
+            idopontService.getFoglalasok(foglalasok);
         } else {
             Toast.makeText(MenuActivity.this, "A lekérdezések során hiba történt", Toast.LENGTH_LONG).show();
         }
