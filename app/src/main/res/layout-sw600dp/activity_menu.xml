@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MenuActivity">
+
+    <TextView
+        android:id="@+id/legtavolabbiFoglalasLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:height="150dp"
+        android:textSize="50dp"
+        android:text="Legtábolabbi foglalás:"
+        />
+
+    <TextView
+        android:id="@+id/legtavolabbiFoglalas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:height="150dp"
+        android:textSize="50dp"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:layout_below="@+id/legtavolabbiFoglalasLabel"
+        />
+
+    <TextView
+        android:id="@+id/foglalasokLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:height="150dp"
+        android:textSize="50dp"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:text="Foglalások:"
+        android:layout_below="@+id/legtavolabbiFoglalas"
+        />
+
+    <TextView
+        android:id="@+id/foglalasok"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:height="150dp"
+        android:textSize="50dp"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:layout_below="@+id/foglalasokLabel"
+        />
+
+    <Button
+        android:id="@+id/idopontFoglalas"
+        android:layout_width="match_parent"
+        android:height="100dp"
+        android:textSize="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/register_margin_top"
+        android:text="@string/idopontfoglalo"
+        android:onClick="gotToIdopontFoglalo"
+        android:layout_below="@+id/foglalasok"
+        />
+
+    <Button
+        android:id="@+id/katalogus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:height="100dp"
+        android:textSize="50dp"
+        android:layout_marginTop="@dimen/register_margin_top"
+        android:layout_below="@+id/idopontFoglalas"
+        android:text="@string/katalogus"
+        android:onClick="goToKatalogus"
+        />
+</RelativeLayout>

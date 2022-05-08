@@ -2,6 +2,7 @@ package com.example.mukormosidopontfoglalo;
 
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -28,8 +29,9 @@ public class NailsListActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (user == null){
-//            finish();
+        if (LoginActivity.isAnonym){
+            Toast.makeText(NailsListActivity.this, "Anonim belépés esetén nincs lehetőség böngészni a katalógusban", Toast.LENGTH_LONG).show();
+            finish();
         }
 
         recyclerView = findViewById(R.id.recyclerView);

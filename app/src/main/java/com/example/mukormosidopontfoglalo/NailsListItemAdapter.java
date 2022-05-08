@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +19,7 @@ public class NailsListItemAdapter extends RecyclerView.Adapter<NailsListItemAdap
     private ArrayList<NalisListItem> listItems;
     private Context context;
     private int lastPosition = -1;
+    private boolean rotate = false;
 
     public NailsListItemAdapter(Context context, ArrayList<NalisListItem> items) {
         listItems = items;
@@ -34,6 +37,19 @@ public class NailsListItemAdapter extends RecyclerView.Adapter<NailsListItemAdap
         NalisListItem currentItem = listItems.get(position);
 
         holder.bindTo(currentItem);
+        if (holder.getAdapterPosition() > lastPosition) {
+            if (((Math.random() * 100)) % 2 == 0) {
+                Animation animation = AnimationUtils.loadAnimation(context, R.anim.other_animation);
+                rotate = false;
+                holder.itemView.startAnimation(animation);
+                lastPosition = holder.getAdapterPosition();
+            } else {
+                Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_row);
+                rotate = true;
+                holder.itemView.startAnimation(animation);
+                lastPosition = holder.getAdapterPosition();
+            }
+        }
     }
 
     @Override

@@ -108,6 +108,7 @@ public class MenuActivity extends AppCompatActivity {
         if (!LoginActivity.isAnonym) {
             String myFormat = "yyyy-MM-dd";
             SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat);
+
             notificationHandler.send(dateFormat.format(myCalendar.getTime()) + " " + orak + ":" + percek);
             idopontok.add(new Idopont(auth.getCurrentUser().getUid(), dateFormat.format(myCalendar.getTime()) + " " + orak + ":" + percek));
         } else {
@@ -130,5 +131,11 @@ public class MenuActivity extends AppCompatActivity {
     protected void onPause() {
         FirebaseAuth.getInstance().signOut();
         super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        FirebaseAuth.getInstance().signOut();
+        super.onStop();
     }
 }
