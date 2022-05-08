@@ -37,18 +37,18 @@ public class NailsListItemAdapter extends RecyclerView.Adapter<NailsListItemAdap
         NalisListItem currentItem = listItems.get(position);
 
         holder.bindTo(currentItem);
-        if (holder.getAdapterPosition() > lastPosition){
-            Animation animation = null;
-            if (rotate){
-                animation = AnimationUtils.loadAnimation(context, R.anim.other_animation);
+        if (holder.getAdapterPosition() > lastPosition) {
+            if (((Math.random() * 100)) % 2 == 0) {
+                Animation animation = AnimationUtils.loadAnimation(context, R.anim.other_animation);
                 rotate = false;
+                holder.itemView.startAnimation(animation);
+                lastPosition = holder.getAdapterPosition();
             } else {
-                animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_row);
+                Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_row);
                 rotate = true;
+                holder.itemView.startAnimation(animation);
+                lastPosition = holder.getAdapterPosition();
             }
-
-            holder.itemView.startAnimation(animation);
-            lastPosition = holder.getAdapterPosition();
         }
     }
 
