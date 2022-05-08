@@ -21,6 +21,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String PREF_KEY = LoginActivity.class.getPackage().toString();
     private static final int RC_SIGN_IN = 123;
     private static final int SECRET_KEY = 666;
+    public static boolean isAnonym = false;
 
     private SharedPreferences preferences;
     private FirebaseAuth auth;
@@ -60,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
+                    isAnonym = true;
                     startShopping();
                 } else {
                     Toast.makeText(LoginActivity.this, "User log in fail: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
